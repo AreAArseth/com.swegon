@@ -378,6 +378,12 @@ class SwegonClient {
                           value: parseFloat(measurementValue),
                         });
                         break;
+                      case SwegonObjectId.CO2:
+                        this.eventHandler.emit('measurement', {
+                          type: MeasurementType.CO2,
+                          value: parseInt(measurementValue, 10),
+                        });
+                        break;
                       case SwegonObjectId.Humidity:
                         this.eventHandler.emit('measurement', {
                           type: MeasurementType.HumidityPercent,
@@ -483,6 +489,18 @@ class SwegonClient {
                       case SwegonObjectId.SupplyTemperatureSetpoint:
                         this.eventHandler.emit('setting', {
                           id: SettingType.SupplyTemperatureSetpoint,
+                          value: parseInt(measurementValue, 10),
+                        });
+                        break;
+                      case SwegonObjectId.CO2HomeLimit:
+                        this.eventHandler.emit('setting', {
+                          id: SettingType.CO2HomeLimit,
+                          value: parseInt(measurementValue, 10),
+                        });
+                        break;
+                      case SwegonObjectId.CO2AwayLimit:
+                        this.eventHandler.emit('setting', {
+                          id: SettingType.CO2AwayLimit,
                           value: parseInt(measurementValue, 10),
                         });
                         break;

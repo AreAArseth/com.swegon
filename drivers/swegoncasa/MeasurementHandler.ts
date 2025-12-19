@@ -69,6 +69,17 @@ class MeasurementHandler {
             await removeCapability(ModeType.AutoAirQualityControlMode);
         }
         break;
+      case MeasurementType.CO2:
+        this.logger.info(`CO2: ${data.value}`);
+        if (data.value > 0) {
+          if (!hasCapability('measure_co2'))
+            await addCapability('measure_co2');
+          await setCapabilityValue('measure_co2', data.value);
+        } else if (data.value === 0) {
+          if (hasCapability('measure_co2'))
+            await removeCapability('measure_co2');
+        }
+        break;
       default:
         break;
     }

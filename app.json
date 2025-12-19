@@ -159,6 +159,7 @@
         "measure_ventilation_level_in",
         "measure_ventilation_level_out",
         "measure_air_quality",
+        "measure_co2",
         "climate_mode",
         "summer_night_cooling_mode",
         "auto_humidity_control_mode",
@@ -442,6 +443,49 @@
               "hint": {
                 "en": "Decrease full boost limit if more boost is wanted. Full boost limit defines how much humidity value must rise over average before full boosting is reached.",
                 "no": "Reduser full boostgrense hvis du ønsker mer boost. Full boostgrense definerer hvor mye fuktighetsverdien må stige over gjennomsnittet før full boost er oppnådd."
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "CO2 Control",
+            "no": "CO2 Kontroll"
+          },
+          "children": [
+            {
+              "id": "co2HomeLimit",
+              "type": "number",
+              "value": 550,
+              "units": {
+                "en": "ppm",
+                "no": "ppm"
+              },
+              "label": {
+                "en": "CO2 Home Limit",
+                "no": "CO2 Hjemme-grense"
+              },
+              "hint": {
+                "en": "CO2 level threshold for Home mode in the Auto Home/Away/Boost feature",
+                "no": "CO2-nivågrense for Hjemme-modus i Auto Hjemme/Borte/Boost-funksjonen"
+              }
+            },
+            {
+              "id": "co2AwayLimit",
+              "type": "number",
+              "value": 400,
+              "units": {
+                "en": "ppm",
+                "no": "ppm"
+              },
+              "label": {
+                "en": "CO2 Away Limit",
+                "no": "CO2 Borte-grense"
+              },
+              "hint": {
+                "en": "CO2 level threshold for Away mode in the Auto Home/Away/Boost feature",
+                "no": "CO2-nivågrense for Borte-modus i Auto Hjemme/Borte/Boost-funksjonen"
               }
             }
           ]
@@ -787,6 +831,26 @@
       "units": {
         "en": "min",
         "no": "min"
+      },
+      "decimals": 0,
+      "getable": true,
+      "setable": false,
+      "insights": true
+    },
+    "measure_co2": {
+      "type": "number",
+      "uiComponent": "sensor",
+      "title": {
+        "en": "CO2",
+        "no": "CO2"
+      },
+      "desc": {
+        "en": "Carbon dioxide level",
+        "no": "Karbondioksidnivå"
+      },
+      "units": {
+        "en": "ppm",
+        "no": "ppm"
       },
       "decimals": 0,
       "getable": true,
