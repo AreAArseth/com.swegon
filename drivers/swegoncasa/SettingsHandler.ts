@@ -82,6 +82,22 @@ class SettingsHandler {
         newSettings[SettingType.SupplyTemperatureSetpoint],
       );
     }
+
+    // CO2 Home Limit
+    if (newSettings[SettingType.CO2HomeLimit]) {
+      await swegonClient?.setValue(
+        SwegonObjectId.CO2HomeLimit,
+        newSettings[SettingType.CO2HomeLimit],
+      );
+    }
+
+    // CO2 Away Limit
+    if (newSettings[SettingType.CO2AwayLimit]) {
+      await swegonClient?.setValue(
+        SwegonObjectId.CO2AwayLimit,
+        newSettings[SettingType.CO2AwayLimit],
+      );
+    }
   }
 
   public async HandleDeviceSettingChanged(

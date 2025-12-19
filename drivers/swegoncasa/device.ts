@@ -35,6 +35,14 @@ class SwegonCasaDevice extends Homey.Device {
     if (!settings.summerNightCoolingBoost) {
       this.setSettings({ summerNightCoolingBoost: 'off' });
     }
+
+    if (!settings.co2HomeLimit) {
+      this.setSettings({ co2HomeLimit: 550 });
+    }
+
+    if (!settings.co2AwayLimit) {
+      this.setSettings({ co2AwayLimit: 400 });
+    }
   }
 
   /** Add capabilities if they do not already exist */
@@ -93,6 +101,10 @@ class SwegonCasaDevice extends Homey.Device {
 
     if (!this.hasCapability('measure_air_quality')) {
       await this.addCapability('measure_air_quality');
+    }
+
+    if (!this.hasCapability('measure_co2')) {
+      await this.addCapability('measure_co2');
     }
   }
 
