@@ -2,11 +2,11 @@
   "id": "temperature_is_below",
   "title": {
     "en": "Temperature !{{is|isn't}} below",
-    "no": "Temperaturen !{{er|er ikke}} under"
+    "no": "Temperaturen !{{er under|er over}} "
   },
   "titleFormatted": {
     "en": "[[temperature_type]] temperature !{{is|isn't}} below [[threshold]] °C",
-    "no": "[[temperature_type]] temperaturen !{{er|er ikke}} under [[threshold]] °C"
+    "no": "[[temperature_type]] temperaturen !{{er under|er over}} [[threshold]] °C"
   },
   "hint": {
     "en": "Check if the selected temperature is below a specified value.",

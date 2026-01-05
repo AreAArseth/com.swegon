@@ -2,11 +2,11 @@
   "id": "humidity_is_below",
   "title": {
     "en": "Humidity !{{is|isn't}} below",
-    "no": "Luftfuktigheten !{{er|er ikke}} under"
+    "no": "Luftfuktigheten !{{er under|er over}}"
   },
   "titleFormatted": {
     "en": "Humidity !{{is|isn't}} below [[threshold]]%",
-    "no": "Luftfuktigheten !{{er|er ikke}} under [[threshold]]%"
+    "no": "Luftfuktigheten !{{er under|er over}} [[threshold]]%"
   },
   "hint": {
     "en": "Check if the humidity is below a specified value.",

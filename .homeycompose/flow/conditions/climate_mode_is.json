@@ -2,11 +2,11 @@
   "id": "climate_mode_is",
   "title": {
     "en": "Climate mode !{{is|isn't}}",
-    "no": "Klimamodusen !{{er|er ikke}}"
+    "no": "Klimamodusen !{{er|ikke er}}"
   },
   "titleFormatted": {
     "en": "Climate mode !{{is|isn't}} [[climate_mode]]",
-    "no": "Klimamodusen !{{er|er ikke}} [[climate_mode]]"
+    "no": "Klimamodusen !{{er|ikke er}} [[climate_mode]]"
   },
   "hint": {
     "en": "Check if the climate mode equals a specific mode.",

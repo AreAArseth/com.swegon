@@ -2,11 +2,11 @@
   "id": "co2_is_above",
   "title": {
     "en": "CO2 level !{{is|isn't}} above",
-    "no": "CO2-nivået !{{er|er ikke}} over"
+    "no": "CO2-nivået !{{er over|er under}}"
   },
   "titleFormatted": {
     "en": "CO2 level !{{is|isn't}} above [[threshold]] ppm",
-    "no": "CO2-nivået !{{er|er ikke}} over [[threshold]] ppm"
+    "no": "CO2-nivået !{{er over|er under}} [[threshold]] ppm"
   },
   "hint": {
     "en": "Check if the CO2 level is above a specified value.",
