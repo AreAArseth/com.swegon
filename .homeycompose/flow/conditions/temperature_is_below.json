@@ -2,7 +2,7 @@
   "id": "temperature_is_below",
   "title": {
     "en": "Temperature !{{is|isn't}} below",
-    "no": "Temperaturen !{{er under|er over}} "
+    "no": "Temperaturen !{{er under|er over}}"
   },
   "titleFormatted": {
     "en": "[[temperature_type]] temperature !{{is|isn't}} below [[threshold]] °C",
