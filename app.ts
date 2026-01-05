@@ -59,15 +59,17 @@ class SwegonCasa extends Homey.App {
     this.homey.flow
       .getDeviceTriggerCard('temperature_changed')
       .registerRunListener((args, state) => {
-        return args.temperatureType === state.temperatureType;
+        return args.temperature_type === state.temperature_type;
       });
 
     // Temperature Above Threshold
     this.homey.flow
       .getDeviceTriggerCard('temperature_above_threshold')
       .registerRunListener((args, state) => {
-        const { threshold, temperatureType } = args;
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        const { threshold, temperature_type } = args;
         const { previousValue } = state;
+        const temperatureType = temperature_type;
         const temperatureCapabilities = {
           supply: 'measure_supply_temperature',
           intake: 'measure_intake_temperature',
@@ -78,7 +80,7 @@ class SwegonCasa extends Homey.App {
         );
         
         // Check if type matches and value crossed threshold from below
-        return temperatureType === state.temperatureType && 
+        return temperature_type === state.temperature_type && 
                previousValue !== undefined && 
                previousValue <= threshold && 
                currentValue > threshold;
@@ -88,8 +90,10 @@ class SwegonCasa extends Homey.App {
     this.homey.flow
       .getDeviceTriggerCard('temperature_below_threshold')
       .registerRunListener((args, state) => {
-        const { threshold, temperatureType } = args;
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        const { threshold, temperature_type } = args;
         const { previousValue } = state;
+        const temperatureType = temperature_type;
         const temperatureCapabilities = {
           supply: 'measure_supply_temperature',
           intake: 'measure_intake_temperature',
@@ -99,7 +103,7 @@ class SwegonCasa extends Homey.App {
           temperatureCapabilities[temperatureType as keyof typeof temperatureCapabilities],
         );
         
-        return temperatureType === state.temperatureType && 
+        return temperature_type === state.temperature_type && 
                previousValue !== undefined && 
                previousValue >= threshold && 
                currentValue < threshold;
@@ -109,15 +113,17 @@ class SwegonCasa extends Homey.App {
     this.homey.flow
       .getDeviceTriggerCard('ventilation_level_changed')
       .registerRunListener((args, state) => {
-        return args.ventilationType === state.ventilationType;
+        return args.ventilation_type === state.ventilation_type;
       });
 
     // Ventilation Level Above Threshold
     this.homey.flow
       .getDeviceTriggerCard('ventilation_level_above_threshold')
       .registerRunListener((args, state) => {
-        const { threshold, ventilationType } = args;
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        const { threshold, ventilation_type } = args;
         const { previousValue } = state;
+        const ventilationType = ventilation_type;
         const ventilationCapabilities = {
           supply: 'measure_ventilation_level_in',
           exhaust: 'measure_ventilation_level_out',
@@ -126,7 +132,7 @@ class SwegonCasa extends Homey.App {
           ventilationCapabilities[ventilationType as keyof typeof ventilationCapabilities],
         );
         
-        return ventilationType === state.ventilationType && 
+        return ventilation_type === state.ventilation_type && 
                previousValue !== undefined && 
                previousValue <= threshold && 
                currentValue > threshold;
@@ -136,8 +142,10 @@ class SwegonCasa extends Homey.App {
     this.homey.flow
       .getDeviceTriggerCard('ventilation_level_below_threshold')
       .registerRunListener((args, state) => {
-        const { threshold, ventilationType } = args;
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        const { threshold, ventilation_type } = args;
         const { previousValue } = state;
+        const ventilationType = ventilation_type;
         const ventilationCapabilities = {
           supply: 'measure_ventilation_level_in',
           exhaust: 'measure_ventilation_level_out',
@@ -146,7 +154,7 @@ class SwegonCasa extends Homey.App {
           ventilationCapabilities[ventilationType as keyof typeof ventilationCapabilities],
         );
         
-        return ventilationType === state.ventilationType && 
+        return ventilation_type === state.ventilation_type && 
                previousValue !== undefined && 
                previousValue >= threshold && 
                currentValue < threshold;
@@ -230,7 +238,9 @@ class SwegonCasa extends Homey.App {
     this.homey.flow
       .getConditionCard('temperature_is_above')
       .registerRunListener((args) => {
-        const { temperatureType, threshold } = args;
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        const { temperature_type, threshold } = args;
+        const temperatureType = temperature_type;
         const temperatureCapabilities = {
           supply: 'measure_supply_temperature',
           intake: 'measure_intake_temperature',
@@ -246,7 +256,9 @@ class SwegonCasa extends Homey.App {
     this.homey.flow
       .getConditionCard('temperature_is_below')
       .registerRunListener((args) => {
-        const { temperatureType, threshold } = args;
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        const { temperature_type, threshold } = args;
+        const temperatureType = temperature_type;
         const temperatureCapabilities = {
           supply: 'measure_supply_temperature',
           intake: 'measure_intake_temperature',
