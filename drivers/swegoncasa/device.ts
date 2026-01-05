@@ -30,19 +30,27 @@ class SwegonCasaDevice extends Homey.Device {
 
     // Add any missing settings
     if (!settings.temperatureControlMode) {
-      this.setSettings({ temperatureControlMode: 'comfort' });
+      this.setSettings({ temperatureControlMode: 'comfort' }).catch((err) => {
+        this.logger.error('Failed to set temperatureControlMode', err);
+      });
     }
 
     if (!settings.summerNightCoolingBoost) {
-      this.setSettings({ summerNightCoolingBoost: 'off' });
+      this.setSettings({ summerNightCoolingBoost: 'off' }).catch((err) => {
+        this.logger.error('Failed to set summerNightCoolingBoost', err);
+      });
     }
 
     if (!settings.co2HomeLimit) {
-      this.setSettings({ co2HomeLimit: 550 });
+      this.setSettings({ co2HomeLimit: 550 }).catch((err) => {
+        this.logger.error('Failed to set co2HomeLimit', err);
+      });
     }
 
     if (!settings.co2AwayLimit) {
-      this.setSettings({ co2AwayLimit: 400 });
+      this.setSettings({ co2AwayLimit: 400 }).catch((err) => {
+        this.logger.error('Failed to set co2AwayLimit', err);
+      });
     }
   }
 
@@ -219,7 +227,9 @@ class SwegonCasaDevice extends Homey.Device {
     const mode = ClimateModes.find((x) => x.id === value);
 
     if (mode) {
-      this.swegonClient?.setClimateMode(currentMode, mode.value);
+      this.swegonClient?.setClimateMode(currentMode, mode.value).catch((err) => {
+        this.logger.error('Failed to set climate mode', err);
+      });
     }
   }
 
@@ -335,7 +345,9 @@ class SwegonCasaDevice extends Homey.Device {
           swegonClient.setValue(
             SwegonObjectId.SummerNightCoolingMode,
             mode.value,
-          );
+          ).catch((err) => {
+            this.logger.error('Failed to set summer night cooling mode', err);
+          });
         }
       },
     );
@@ -353,7 +365,9 @@ class SwegonCasaDevice extends Homey.Device {
           swegonClient.setValue(
             SwegonObjectId.AutoHumidityControlMode,
             mode.value,
-          );
+          ).catch((err) => {
+            this.logger.error('Failed to set auto humidity control mode', err);
+          });
         }
       },
     );
@@ -371,7 +385,9 @@ class SwegonCasaDevice extends Homey.Device {
           swegonClient.setValue(
             SwegonObjectId.AutoAirQualityControlMode,
             mode.value,
-          );
+          ).catch((err) => {
+            this.logger.error('Failed to set auto air quality control mode', err);
+          });
         }
       },
     );
@@ -388,7 +404,9 @@ class SwegonCasaDevice extends Homey.Device {
   }
 
   async onUninit(): Promise<void> {
-    this.swegonClient?.destroy();
+    this.swegonClient?.destroy().catch((err) => {
+      this.logger.error('Failed to destroy swegon client', err);
+    });
   }
 
   /**

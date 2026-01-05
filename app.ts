@@ -59,22 +59,26 @@ class SwegonCasa extends Homey.App {
     this.homey.flow
       .getDeviceTriggerCard('temperature_changed')
       .registerRunListener((args, state) => {
-        return args.temperature_type === state.temperature_type;
+        return args.temperatureType === state.temperatureType;
       });
 
     // Temperature Above Threshold
     this.homey.flow
       .getDeviceTriggerCard('temperature_above_threshold')
       .registerRunListener((args, state) => {
-        const { threshold, temperature_type } = args;
+        const { threshold, temperatureType } = args;
         const { previousValue } = state;
+        const temperatureCapabilities = {
+          supply: 'measure_supply_temperature',
+          intake: 'measure_intake_temperature',
+          return: 'measure_return_temperature',
+        } as const;
         const currentValue = args.device.getCapabilityValue(
-          temperature_type === 'supply' ? 'measure_supply_temperature' :
-          temperature_type === 'intake' ? 'measure_intake_temperature' : 'measure_return_temperature'
+          temperatureCapabilities[temperatureType as keyof typeof temperatureCapabilities],
         );
         
         // Check if type matches and value crossed threshold from below
-        return temperature_type === state.temperature_type && 
+        return temperatureType === state.temperatureType && 
                previousValue !== undefined && 
                previousValue <= threshold && 
                currentValue > threshold;
@@ -84,14 +88,18 @@ class SwegonCasa extends Homey.App {
     this.homey.flow
       .getDeviceTriggerCard('temperature_below_threshold')
       .registerRunListener((args, state) => {
-        const { threshold, temperature_type } = args;
+        const { threshold, temperatureType } = args;
         const { previousValue } = state;
+        const temperatureCapabilities = {
+          supply: 'measure_supply_temperature',
+          intake: 'measure_intake_temperature',
+          return: 'measure_return_temperature',
+        } as const;
         const currentValue = args.device.getCapabilityValue(
-          temperature_type === 'supply' ? 'measure_supply_temperature' :
-          temperature_type === 'intake' ? 'measure_intake_temperature' : 'measure_return_temperature'
+          temperatureCapabilities[temperatureType as keyof typeof temperatureCapabilities],
         );
         
-        return temperature_type === state.temperature_type && 
+        return temperatureType === state.temperatureType && 
                previousValue !== undefined && 
                previousValue >= threshold && 
                currentValue < threshold;
@@ -101,20 +109,24 @@ class SwegonCasa extends Homey.App {
     this.homey.flow
       .getDeviceTriggerCard('ventilation_level_changed')
       .registerRunListener((args, state) => {
-        return args.ventilation_type === state.ventilation_type;
+        return args.ventilationType === state.ventilationType;
       });
 
     // Ventilation Level Above Threshold
     this.homey.flow
       .getDeviceTriggerCard('ventilation_level_above_threshold')
       .registerRunListener((args, state) => {
-        const { threshold, ventilation_type } = args;
+        const { threshold, ventilationType } = args;
         const { previousValue } = state;
+        const ventilationCapabilities = {
+          supply: 'measure_ventilation_level_in',
+          exhaust: 'measure_ventilation_level_out',
+        } as const;
         const currentValue = args.device.getCapabilityValue(
-          ventilation_type === 'supply' ? 'measure_ventilation_level_in' : 'measure_ventilation_level_out'
+          ventilationCapabilities[ventilationType as keyof typeof ventilationCapabilities],
         );
         
-        return ventilation_type === state.ventilation_type && 
+        return ventilationType === state.ventilationType && 
                previousValue !== undefined && 
                previousValue <= threshold && 
                currentValue > threshold;
@@ -124,13 +136,17 @@ class SwegonCasa extends Homey.App {
     this.homey.flow
       .getDeviceTriggerCard('ventilation_level_below_threshold')
       .registerRunListener((args, state) => {
-        const { threshold, ventilation_type } = args;
+        const { threshold, ventilationType } = args;
         const { previousValue } = state;
+        const ventilationCapabilities = {
+          supply: 'measure_ventilation_level_in',
+          exhaust: 'measure_ventilation_level_out',
+        } as const;
         const currentValue = args.device.getCapabilityValue(
-          ventilation_type === 'supply' ? 'measure_ventilation_level_in' : 'measure_ventilation_level_out'
+          ventilationCapabilities[ventilationType as keyof typeof ventilationCapabilities],
         );
         
-        return ventilation_type === state.ventilation_type && 
+        return ventilationType === state.ventilationType && 
                previousValue !== undefined && 
                previousValue >= threshold && 
                currentValue < threshold;
@@ -214,10 +230,14 @@ class SwegonCasa extends Homey.App {
     this.homey.flow
       .getConditionCard('temperature_is_above')
       .registerRunListener((args) => {
-        const { temperature_type, threshold } = args;
+        const { temperatureType, threshold } = args;
+        const temperatureCapabilities = {
+          supply: 'measure_supply_temperature',
+          intake: 'measure_intake_temperature',
+          return: 'measure_return_temperature',
+        } as const;
         const currentValue = args.device.getCapabilityValue(
-          temperature_type === 'supply' ? 'measure_supply_temperature' :
-          temperature_type === 'intake' ? 'measure_intake_temperature' : 'measure_return_temperature'
+          temperatureCapabilities[temperatureType as keyof typeof temperatureCapabilities],
         );
         return currentValue > threshold;
       });
@@ -226,10 +246,14 @@ class SwegonCasa extends Homey.App {
     this.homey.flow
       .getConditionCard('temperature_is_below')
       .registerRunListener((args) => {
-        const { temperature_type, threshold } = args;
+        const { temperatureType, threshold } = args;
+        const temperatureCapabilities = {
+          supply: 'measure_supply_temperature',
+          intake: 'measure_intake_temperature',
+          return: 'measure_return_temperature',
+        } as const;
         const currentValue = args.device.getCapabilityValue(
-          temperature_type === 'supply' ? 'measure_supply_temperature' :
-          temperature_type === 'intake' ? 'measure_intake_temperature' : 'measure_return_temperature'
+          temperatureCapabilities[temperatureType as keyof typeof temperatureCapabilities],
         );
         return currentValue < threshold;
       });
