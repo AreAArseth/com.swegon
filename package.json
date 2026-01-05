@@ -4,7 +4,7 @@
   "main": "app.ts",
   "scripts": {
     "start": "homey app run",
-    "build": "homey app build",
+    "build": "tsc",
     "deploy": "homey app install",
     "lint": "eslint . --ext js,jsx,ts,tsx --quiet",
     "lint-fix": "eslint . --ext js,jsx,ts,tsx --quiet --fix"
