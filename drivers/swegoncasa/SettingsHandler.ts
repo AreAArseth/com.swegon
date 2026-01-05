@@ -127,6 +127,11 @@ class SettingsHandler {
       }
     }
 
+    // Supply Temperature Setpoint - also update the capability
+    if (newSetting[SettingType.SupplyTemperatureSetpoint]) {
+      await setCapabilityValue('target_temperature', newSetting[SettingType.SupplyTemperatureSetpoint]);
+    }
+
     await setSettings(newSetting);
   }
 }
