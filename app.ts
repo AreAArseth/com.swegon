@@ -68,10 +68,10 @@ class SwegonCasa extends Homey.App {
       .registerRunListener((args, state) => {
         const { threshold, temperature_type } = args;
         const { previousValue } = state;
-        const currentValue = state.temperature_type === temperature_type ? args.device.getCapabilityValue(
+        const currentValue = args.device.getCapabilityValue(
           temperature_type === 'supply' ? 'measure_supply_temperature' :
           temperature_type === 'intake' ? 'measure_intake_temperature' : 'measure_return_temperature'
-        ) : null;
+        );
         
         // Check if type matches and value crossed threshold from below
         return temperature_type === state.temperature_type && 
