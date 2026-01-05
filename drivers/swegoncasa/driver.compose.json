@@ -13,6 +13,7 @@
     "local"
   ],
   "capabilities": [
+    "target_temperature",
     "measure_humidity_percent",
     "measure_humidity_amount",
     "measure_return_temperature",
