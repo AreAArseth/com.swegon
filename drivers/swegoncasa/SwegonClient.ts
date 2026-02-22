@@ -27,6 +27,7 @@ class SwegonClient {
   private password = '';
   private token = '';
   private ws: WebSocket | null = null;
+  private wsSocket: WebSocket | null = null;
   private eventHandler: EventEmitter;
   private logger: Logger;
   private timestamp: Date = new Date();
@@ -66,8 +67,13 @@ class SwegonClient {
     );
   }
 
+  private isWsReady(): boolean {
+    return this.ws !== null && this.ws.readyState === WebSocket.OPEN;
+  }
+
   public async setValue(id: SwegonObjectId, value: number): Promise<void> {
-    if (this.ws) {
+    if (this.isWsReady()) {
+      const ws = this.ws!;
       const writeMessage = [
         "message",
         JSON.stringify(SwegonConstants.WriteArgs(id, value))
@@ -75,7 +81,7 @@ class SwegonClient {
 
       this.logger.debug('Sending message to Swegon', writeMessage);
 
-      this.ws.send(`42${JSON.stringify(writeMessage)}`);
+      ws.send(`42${JSON.stringify(writeMessage)}`);
     }
   }
 
@@ -84,8 +90,9 @@ class SwegonClient {
     newValue: SwegonClimateMode,
   ): Promise<void> {
     this.logger.debug('Setting climate mode', { currentValue, newValue });
-    if (this.ws && newValue !== currentValue) {
-      // Reset Travel mode if currently in Travel mode
+    if (this.isWsReady() && newValue !== currentValue) {
+      const ws = this.ws!;
+
       if (currentValue === SwegonClimateMode.Travel) {
         const travelMessage = [
           "message",
@@ -93,10 +100,9 @@ class SwegonClient {
         ];
 
         this.logger.debug('Sending message to Swegon', travelMessage);
-        this.ws.send(`42${JSON.stringify(travelMessage)}`);
+        ws.send(`42${JSON.stringify(travelMessage)}`);
       }
 
-      // Reset Fireplace mode if currently in Fireplace mode
       if (currentValue === SwegonClimateMode.Fireplace) {
         const fireplaceMessage = [
           "message",
@@ -108,12 +114,11 @@ class SwegonClient {
         ];
 
         this.logger.debug('Sending message to Swegon', fireplaceMessage);
-        this.ws.send(`42${JSON.stringify(fireplaceMessage)}`);
+        ws.send(`42${JSON.stringify(fireplaceMessage)}`);
         this.logger.debug('Sending message to Swegon', fireplaceMessage2);
-        this.ws.send(`42${JSON.stringify(fireplaceMessage2)}`);
+        ws.send(`42${JSON.stringify(fireplaceMessage2)}`);
       }
 
-      // Set fan speed value
       if (
         newValue === SwegonClimateMode.Away ||
         newValue === SwegonClimateMode.Home ||
@@ -127,29 +132,26 @@ class SwegonClient {
         this.logger.info(`Setting Fan Speed to ${newValue}`);
         this.logger.debug('Sending message to Swegon', fanSpeedMessage);
 
-        this.ws.send(`42${JSON.stringify(fanSpeedMessage)}`);
+        ws.send(`42${JSON.stringify(fanSpeedMessage)}`);
       }
 
-      // Turn on
       if (currentValue === SwegonClimateMode.Off) {
         const onMessage = [
           "message",
           JSON.stringify(SwegonConstants.WriteArgs(SwegonObjectId.TurnOff, 0))
         ];
 
-        // TODO: Not sure what this does yet
         const onMessage2 = [
           "message",
           JSON.stringify(SwegonConstants.WriteArgs('156', 1))
         ];
 
         this.logger.debug('Sending message to Swegon', onMessage);
-        this.ws.send(`42${JSON.stringify(onMessage)}`);
+        ws.send(`42${JSON.stringify(onMessage)}`);
         this.logger.debug('Sending message to Swegon', onMessage2);
-        this.ws.send(`42${JSON.stringify(onMessage2)}`);
+        ws.send(`42${JSON.stringify(onMessage2)}`);
       }
 
-      // Turn off
       if (newValue === SwegonClimateMode.Off) {
         const offMessage = [
           "message",
@@ -157,10 +159,9 @@ class SwegonClient {
         ];
 
         this.logger.debug('Turning off', offMessage);
-        this.ws.send(`42${JSON.stringify(offMessage)}`);
+        ws.send(`42${JSON.stringify(offMessage)}`);
       }
 
-      // TODO: Not sure what this does yet, but swegoncasa.io does it so we do as well
       if (newValue === SwegonClimateMode.Boost) {
         const boostMessage = [
           "message",
@@ -168,10 +169,9 @@ class SwegonClient {
         ];
 
         this.logger.debug('Turning on boost', boostMessage);
-        this.ws.send(`42${JSON.stringify(boostMessage)}`);
+        ws.send(`42${JSON.stringify(boostMessage)}`);
       }
 
-      // TODO: Not sure what this does yet, but swegoncasa.io does it so we do as well
       if (newValue === SwegonClimateMode.Fireplace) {
         const fireplaceMessage = [
           "message",
@@ -179,10 +179,9 @@ class SwegonClient {
         ];
 
         this.logger.debug('Turning on fireplace', fireplaceMessage);
-        this.ws.send(`42${JSON.stringify(fireplaceMessage)}`);
+        ws.send(`42${JSON.stringify(fireplaceMessage)}`);
       }
 
-      // TODO: Not sure what this does yet, but swegoncasa.io does it so we do as well
       if (newValue === SwegonClimateMode.Travel) {
         const travelMessage = [
           "message",
@@ -195,9 +194,9 @@ class SwegonClient {
         ];
 
         this.logger.debug('Turning on travel', travelMessage);
-        this.ws.send(`42${JSON.stringify(travelMessage)}`);
+        ws.send(`42${JSON.stringify(travelMessage)}`);
         this.logger.debug('Turning on travel', travelMessage2);
-        this.ws.send(`42${JSON.stringify(travelMessage2)}`);
+        ws.send(`42${JSON.stringify(travelMessage2)}`);
       }
     }
   }
@@ -216,8 +215,11 @@ class SwegonClient {
         origin: SwegonCasaOrigin,
       });
 
+      this.wsSocket = ws;
+
       ws.on('open', () => {
         this.logger.info('WebSocket Connected');
+        this.ws = ws;
 
         // Send connect packet med autentisering
         const connectData = {
@@ -230,8 +232,10 @@ class SwegonClient {
         
         // Keep the connection alive with ping messages
         this.pingInterval = setInterval(() => {
-          ws.send('3');
-          this.logger.debug("Sending ping");
+          if (ws.readyState === WebSocket.OPEN) {
+            ws.send('3');
+            this.logger.debug("Sending ping");
+          }
         }, 25000);
       });
 
@@ -244,11 +248,13 @@ class SwegonClient {
       });
 
       ws.on('close', (code: number, reason: Buffer) => {
+        this.ws = null;
+        this.wsSocket = null;
         if (this.pingInterval) {
           clearInterval(this.pingInterval);
           this.pingInterval = null;
         }
-        this.hasInitialized = false;  // Reset ved disconnect
+        this.hasInitialized = false;
         
         this.logger.error('WebSocket Closed:', {
           code,
@@ -272,7 +278,7 @@ class SwegonClient {
           if (value.startsWith('0')) {
             try {
               const handshakeData = JSON.parse(value.substring(1));
-              console.debug("Handshake data:", handshakeData);
+              this.logger.debug("Handshake data:", handshakeData);
               
               // Send connect packet
               const connectData = {
@@ -499,8 +505,6 @@ class SwegonClient {
      
         },
       );
-
-      this.ws = ws;
     } catch (err) {
       this.logger.error(err);
     }
@@ -548,7 +552,9 @@ class SwegonClient {
   }
 
   public async destroy(): Promise<void> {
-    this.ws?.close();
+    this.wsSocket?.close();
+    this.ws = null;
+    this.wsSocket = null;
   }
 }
 
